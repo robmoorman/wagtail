@@ -109,7 +109,7 @@ lifecycle methods, you can convert them to classes (``class MyComponent extends 
 
     export default MyComponent
 
-Note that we always export a default constants, in this case ``MyComponent``. The name of the constant should always match the filename (``MyComponent.js``).
+Note that we always export a default constant, in this case ``MyComponent``. The name of the constant should always match the filename (``MyComponent.js``).
 
 When it comes to the point our component requires data we create a container component and subscribe to our stores with ``connect()``, as you will see below.
 
@@ -122,7 +122,7 @@ When it comes to the point our component requires data we create a container com
     ...
   }
 
-  const connect = (state) => {
+  const mapStateToProps = (state) => {
     ...
   };
 
