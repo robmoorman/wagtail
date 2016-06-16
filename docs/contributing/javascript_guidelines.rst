@@ -54,6 +54,17 @@ A complete list of the possible linting rules can be found here:
 Wagtail React guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+**ES6**
+
+T.b.d.
+
+* Arrow functions
+* Spread operators
+
+**JSX**
+
+T.b.d.
+
 **Directory structures**
 
 T.b.d.
