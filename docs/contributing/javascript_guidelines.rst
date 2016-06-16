@@ -65,24 +65,24 @@ All actions within Wagtail are available via actionCreators.
 Actions must be formatted as a `Flux Standard Action<https://github.com/acdlite/flux-standard-action>`_. In this case
 an action exists of the following properties.
 
-```javascript
-{
-  payload: {
-    email: 'foo@bar.com'
-  },
-  type: 'LOGIN_SUCCESS'
-}
-```
+.. code-block:: javascript
+
+    {
+      payload: {
+        email: 'foo@bar.com'
+      },
+      type: 'LOGIN_SUCCESS'
+    }
 
 In case of an error, the action should be as you will see below (note that the ``payload`` should be an error object).
 
-```javascript
-{
-  error: true,
-  payload: new Error('Sorry, the credentials you entered are invalid.'),
-  type: 'LOGIN_FAILURE'
-}
-```
+.. code-block:: javascript
+
+    {
+      error: true,
+      payload: new Error('Sorry, the credentials you entered are invalid.'),
+      type: 'LOGIN_FAILURE'
+    }
 
 An action must not include properties other than ``type``, ``payload``, ``error``, and ``meta``.
 
@@ -95,40 +95,39 @@ You can read more about these terms in the `documentation of Redux <http://redux
 Presentational components should always be stateless and have to be functions. If you need a local state, implement
 lifecycle methods, you can convert them to classes (``class MyComponent extends Component``). In most cases we only use function components.
 
-```javascript
-import { PropTypes } from 'react';
+.. code-block:: javascript
 
-const MyComponent = ({ username }) => (
-  <div>Hello {username}!</div>
-);
+    import { PropTypes } from 'react';
 
-MyComponent.propTypes = {
-  username: PropTypes.string.isRequired
-};
+    const MyComponent = ({ username }) => (
+      <div>Hello {username}!</div>
+    );
 
-export default MyComponent
-```
+    MyComponent.propTypes = {
+      username: PropTypes.string.isRequired
+    };
+
+    export default MyComponent
 
 Note that we always export a default constants, in this case ``MyComponent``. The name of the constant should always match the filename (``MyComponent.js``).
 
 When it comes to the point our component requires data we create a container component and subscribe to our stores with ``connect()``, as you will see below.
 
-```javascript
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
+.. code-block:: javascript
 
-class MyContainer extends Component {
-  ...
-}
+  import React, { PropTypes } from 'react';
+  import { connect } from 'react-redux';
 
-const connect = (state) => {
-  ...
-};
+  class MyContainer extends Component {
+    ...
+  }
 
-const mapDisPatchToProps = (dispatch) => {
-  ...
-};
+  const connect = (state) => {
+    ...
+  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyContainer);
+  const mapDisPatchToProps = (dispatch) => {
+    ...
+  };
 
-```
+  export default connect(mapStateToProps, mapDispatchToProps)(MyContainer);
