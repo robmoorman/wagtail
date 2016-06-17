@@ -97,6 +97,10 @@ In case of an error, the action should be as you will see below (note that the `
 
 An action must not include properties other than ``type``, ``payload``, ``error``, and ``meta``.
 
+**Redux-actions**
+
+T.b.d.
+
 **Presentational and container components**
 
 Wagtail embraces the idea of seperating presentational and containers components. Presentational components define how
