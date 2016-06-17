@@ -1,79 +1,108 @@
 JavaScript coding guidelines
 ============================
 
-Write JavaScript according to the `Airbnb Styleguide <http://github.com/airbnb/javascript>`_, with some exceptions:
-
--  Use soft-tabs with a four space indent. Spaces are the only way to
-   guarantee code renders the same in any person's environment.
--  We accept ``snake_case`` in object properties, such as
-   ``ajaxResponse.page_title``, however camelCase or UPPER_CASE should be used
-   everywhere else.
+Wagtail writes JavaScript according it's own ESLint config rules named `eslint-config-wagtail <https://www.npmjs.com/package/eslint-config-wagtail>`_,
+which is based upon the rules defined in the `Airbnb Styleguide <http://github.com/airbnb/javascript>`_.
 
 
-Linting and formatting code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Linting
+~~~~~~~
 
-Wagtail provides some tooling configuration to help check your code meets the
-styleguide. You'll need node.js and npm on your development machine.
-Ensure project dependencies are installed by running ``npm install``
+All JavaScript code in the Wagtail codebase is compliant with the specs from the ESLint config. After making a Pull
+Request the linter will also check all the JavaScript code, so make sure you checked you changes with ESLint before
+you commit your code.
 
+**Running the linter**
 
-**Linting code**
-
-``npm run lint:js``
-
-This will lint all the JS in the wagtail project, excluding vendor
-files and compiled libraries.
-
-Some of the modals are generated via server-side scripts. These include
-template tags that upset the linter, so modal workflow JavaScript is
-excluded from the linter.
-
-
-**Formatting code**
-
-``npm run format:js``
-
-This will perform safe edits to conform your JS code to the styleguide.
-It won't touch the line-length, or convert quotemarks from double to single.
-
-Run the linter after you've formatted the code to see what manual fixes
-you need to make to the codebase.
-
-**Changing the linter configuration**
-
-Under the hood, the tasks use the `JavaScript Code Style <http://jscs.info/>`_ library.
-
-To edit the settings for ignored files, or to change the linting rules,
-edit the ``.jscsrc`` file in the wagtail project root.
-
-A complete list of the possible linting rules can be found here:
-`JSCS Rules <http://jscs.info/rules.html>`_
+Execute ``npm run lint`` to check if your JavaScript code meets the styleguide.
 
 
 Wagtail React guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
+In addition to the JavaScript used in the ``wagtailadmin`` app, we use `React <https://facebook.github.io/react/>`_ to enhance the UI with interactive
+components, like the Explorer.
+
 **ES6**
 
-T.b.d.
+In Wagtail we use `Babel <https://babeljs.io/docs/learn-es2015/>`_ with the ``es2015`` and ``react`` presets.
+Especially with React in a combination with Redux we use the following features a lot.
 
-* Arrow functions
-* Spread operators
+**Arrow functions**
+
+```javascript
+// Bad
+export const loginSuccess = createAction('LOGIN_SUCCESS', function(email, profile) {
+  return { email: email, profile: profile };
+});
+
+// Good
+export const loginSuccess = createAction('LOGIN_SUCCESS', (email, profile) => {
+  return { email, profile };
+});
+```
+
+Note that we always wrap single arguments with brackets.
+
+* Spread operators (instead of Object.assign)
+
+```javascript
+// Bad
+case 'LOGIN_SUCCESS':
+  return Object.assign({}, state, {
+    email: action.payload.email,
+    profile: action.payload.profile
+  });
+
+// Good
+case 'LOGIN_SUCCESS':
+  return { ...state, email: action.payload.email, profile: action.payload.profile };
+```
 
 **JSX**
 
-T.b.d.
+All components in Wagtail are written with the `JSX <https://facebook.github.io/react/docs/jsx-in-depth.html>`_ syntax.
+Aligment styles are applied as you will see below.
+
+```javascript
+// Bad
+<Component/>
+
+// Bad
+<Component myProperty="foo"
+           otherProperty="bar" />
+
+// Good
+<Component />
+
+// Good
+<Component
+  myProperty="foo"
+  otherProperty="bar"
+/>
+
+// Good (if a single property fits on one line)
+<Component myProperty="foo" />
+```
+
 
 **Directory structures**
 
-T.b.d.
+In Wagtail all components have their own directory (placed in ``client/src/components``), documentation and styles.
+A component directory exists at least of the following files (e.g. explorer):
+
+* ``Explorer.js`` (since the component it's named ``Explorer``)
+* ``style.scss``
+* ``README.md``
+
+If the component is reusable we give them an own directory. It the components only belongs to one other component,
+place them in the same directory, e.g. ``ExplorerButton.js`` and ``Explorer.js``.
 
 **Actions**
 
-All actions within Wagtail are available via actionCreators.
+All actions within Wagtail are created by the `createAction` method of `redux-actions <https://github.com/acdlite/redux-actions>`_.
 
-Actions must be formatted as a `Flux Standard Action<https://github.com/acdlite/flux-standard-action>`_. In this case
+Actions must be formatted as a `Flux Standard Action <https://github.com/acdlite/flux-standard-action>`_. In this case
 an action exists of the following properties.
 
 .. code-block:: javascript
@@ -95,7 +124,11 @@ In case of an error, the action should be as you will see below (note that the `
       type: 'LOGIN_FAILURE'
     }
 
-An action must not include properties other than ``type``, ``payload``, ``error``, and ``meta``.
+An action must not include properties other than ``type``, ``payload``, ``error``, and ``meta``. Since we are using
+`redux-action`, these requirements on actions are taken care for us.
+
+Also notice the ``_SUCCESS`` and ``__FAILURE`` appendix in the action name, names with ``__COMPLETE`` or ``_ERROR``
+MUST NOT be used instead.
 
 **Redux-actions**
 
